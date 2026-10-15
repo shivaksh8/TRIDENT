@@ -1,0 +1,73 @@
+{
+  "location": "Kolhapur, Maharashtra",
+  "lat": 16.7,
+  "lon": 74.24,
+  "fetched_at": "2026-10-15T20:19:51.163232+00:00",
+  "source": "open-meteo-live",
+  "forecast": [
+    {
+      "date": "2026-10-16",
+      "precipitation_mm": 1.7,
+      "condition": "Dense drizzle",
+      "wmo_code": 55,
+      "temp_max_c": 34.4,
+      "wind_kmh": 15.9
+    },
+    {
+      "date": "2026-10-17",
+      "precipitation_mm": 12.1,
+      "condition": "Thunderstorm",
+      "wmo_code": 95,
+      "temp_max_c": 31.8,
+      "wind_kmh": 12.5
+    },
+    {
+      "date": "2026-10-18",
+      "precipitation_mm": 0.0,
+      "condition": "Fog",
+      "wmo_code": 45,
+      "temp_max_c": 31.1,
+      "wind_kmh": 11.5
+    },
+    {
+      "date": "2026-10-19",
+      "precipitation_mm": 10.0,
+      "condition": "Thunderstorm",
+      "wmo_code": 95,
+      "temp_max_c": 31.3,
+      "wind_kmh": 10.6
+    },
+    {
+      "date": "2026-10-20",
+      "precipitation_mm": 0.0,
+      "condition": "Fog",
+      "wmo_code": 45,
+      "temp_max_c": 31.4,
+      "wind_kmh": 10.5
+    },
+    {
+      "date": "2026-10-21",
+      "precipitation_mm": 0.0,
+      "condition": "Fog",
+      "wmo_code": 45,
+      "temp_max_c": 32.4,
+      "wind_kmh": 11.1
+    },
+    {
+      "date": "2026-10-22",
+      "precipitation_mm": 1.2,
+      "condition": "Light drizzle",
+      "wmo_code": 51,
+      "temp_max_c": 31.8,
+      "wind_kmh": 15.8
+    }
+  ],
+  "summary": {
+    "day3_precipitation_mm": 0.0,
+    "total_3day_mm": 13.8,
+    "scenario_severity": "low",
+    "flood_spread_ticks": 0,
+    "alert_level": "GREEN",
+    "narrative": "Low rainfall (0mm). Normal operations possible."
+  }
+}
