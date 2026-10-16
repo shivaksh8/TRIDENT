@@ -64,9 +64,10 @@ def test_b1_uncertainty():
 def test_b2_shelter_overflow():
     print("\n--- B2: Shelter Overflow ---")
     engine = SimulationEngine("test_b2", StrategyType.GREEDY, seed=42)
-    # Reduce shelter capacity to force overflow
+    # Reduce shelter capacity to force overflow: set it to the size of first request
+    req_size = engine.state.requests[0].people if engine.state.requests else 1500
     for s in engine.state.shelters:
-        s.total_capacity = 10
+        s.total_capacity = req_size
     engine.start()
 
     overflow_fired = False
@@ -137,7 +138,7 @@ def test_disruptions():
         if state.recent_events:
             for ev in state.recent_events:
                 if ev.event_type.value not in ("shelter_full",):
-                    print(f"  Tick {tick+1}: EVENT {ev.event_type} → {ev.target_id}")
+                    print(f"  Tick {tick+1}: EVENT {ev.event_type} -> {ev.target_id}")
 
 
 def test_benchmark():
@@ -214,7 +215,7 @@ def test_f1_predictive_amphibious():
 
     if soon_flood_nodes:
         trap_node = soon_flood_nodes[0]
-        # Build a fake path: some_start → trap_node (2 steps → arrives tick_offset=1)
+        # Build a fake path: some_start -> trap_node (2 steps -> arrives tick_offset=1)
         fake_path = ["start_fake", trap_node.id]
         # Directly test with a small ticks_until_flooded value
         # Temporarily set ticks_until_flooded to 1 on the node to guarantee trap detection

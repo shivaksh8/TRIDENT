@@ -78,21 +78,26 @@ def find_nearest_graph_node(lat: float, lon: float, nodes: list, node_type: str 
 
 def people_to_rescue_groups(total_displaced: int, seed: int) -> list[dict]:
     """
-    Split displaced population into rescue groups of realistic size.
-    Groups sized to fit within vehicle capacities (max 15 per trip for boats).
+    Split displaced population into realistic large-scale evacuation groups/waves.
+    Groups are sized between 600 and 1,800 people to represent evacuation sectors/waves,
+    matching the multi-vehicle flotilla and convoy capacities (2,000 - 3,000).
+    The sum of all groups across a village equals the full displaced population.
     """
     rng = random.Random(seed)
     groups = []
-    remaining = min(total_displaced, 200)  # cap per village for simulation scale
+    remaining = total_displaced
     group_num = 0
     while remaining > 0:
-        # Groups of 5-15 to fit boat capacity (boats carry 15, trucks 10, heli 6)
-        size = min(remaining, rng.randint(5, 15))
+        if remaining <= 1800:
+            size = remaining
+        else:
+            target = rng.randint(1200, 1800)
+            if remaining - target < 400:
+                target = remaining // 2
+            size = target
         groups.append({"people": size, "group_num": group_num})
         remaining -= size
         group_num += 1
-        if group_num >= 3:  # max 3 groups per village for playable density
-            break
     return groups
 
 

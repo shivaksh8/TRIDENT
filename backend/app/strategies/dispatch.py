@@ -469,7 +469,7 @@ def negotiation_assign(world: WorldState, graph: GraphEngine) -> list[Assignment
 
                 # --- F2: Throughput efficiency bonus ---
                 people_eff = min(boat.capacity, _effective_people(req))
-                throughput_bonus = people_eff * 0.45
+                throughput_bonus = (people_eff / boat.capacity) * 5.0
 
                 # --- B4: Fairness boost for underserved zones ---
                 req_zone = req.neighbourhood or "unknown"

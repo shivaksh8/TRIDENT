@@ -83,7 +83,7 @@ def load_graph() -> tuple[list[Node], list[Edge]]:
     return nodes, edges
 
 
-def load_requests(nodes: list[Node], seed: int = 2019, max_requests: int = 25) -> list[RescueRequest]:
+def load_requests(nodes: list[Node], seed: int = 2019, max_requests: Optional[int] = None) -> list[RescueRequest]:
     """Load IFI rescue requests and snap to graph nodes."""
     with open(REQUESTS_PATH) as f:
         raw_requests = json.load(f)
@@ -93,8 +93,9 @@ def load_requests(nodes: list[Node], seed: int = 2019, max_requests: int = 25) -
     # Build node lookup by id
     node_ids = {n.id for n in nodes}
 
+    req_slice = raw_requests[:max_requests] if max_requests is not None else raw_requests
     requests = []
-    for i, raw in enumerate(raw_requests[:max_requests]):
+    for i, raw in enumerate(req_slice):
         node_id = raw.get("node_id")
         if node_id not in node_ids:
             # Snap to any available node (fallback)
@@ -136,26 +137,26 @@ def place_boats(nodes: list[Node], seed: int = 2019) -> list[Boat]:
         return lst[idx % len(lst)].id
 
     boats = [
-        # Rescue boats on the Panchaganga river (NDRF inflatable boats, 15-person capacity)
+        # Rescue boats on the Panchaganga river (NDRF motorised boat flotillas)
         Boat(id="boat_1", location=pick(water_nodes_sorted, 0),
-             capacity=15, speed=1.0,
+             capacity=2500, speed=1.0,
              status=BoatStatus.IDLE, vehicle_type=VehicleType.BOAT),
         Boat(id="boat_2", location=pick(water_nodes_sorted, 3),
-             capacity=15, speed=1.0,
+             capacity=2500, speed=1.0,
              status=BoatStatus.IDLE, vehicle_type=VehicleType.BOAT),
         Boat(id="boat_3", location=pick(water_nodes_sorted, 6),
-             capacity=12, speed=1.2,
+             capacity=2200, speed=1.2,
              status=BoatStatus.IDLE, vehicle_type=VehicleType.BOAT),
-        # Rescue trucks on road network (Army trucks, 10-person capacity)
+        # Rescue trucks on road network (Army evacuation columns)
         Boat(id="truck_1", location=pick(road_nodes_sorted, 10),
-             capacity=10, speed=0.9,
+             capacity=2000, speed=0.9,
              status=BoatStatus.IDLE, vehicle_type=VehicleType.TRUCK),
         Boat(id="truck_2", location=pick(road_nodes_sorted, 40),
-             capacity=10, speed=0.9,
+             capacity=2000, speed=0.9,
              status=BoatStatus.IDLE, vehicle_type=VehicleType.TRUCK),
-        # Helicopter (IAF Mi-17V5, 20-person capacity, fastest)
+        # Helicopter (IAF Heavy Airlift Squadron)
         Boat(id="heli_1", location=pick(road_nodes_sorted, 20),
-             capacity=20, speed=2.0,
+             capacity=3000, speed=2.0,
              status=BoatStatus.IDLE, vehicle_type=VehicleType.HELICOPTER),
     ]
     return boats
@@ -169,9 +170,9 @@ def place_shelters(nodes: list[Node]) -> list[Shelter]:
     """
     # Real relief camp locations (2019 Kolhapur flood)
     relief_camps = [
-        ("shelter_rajaram",  "Rajaram College",   16.7021, 74.2489, 500),
-        ("shelter_stadium",  "Shahu Stadium",      16.6981, 74.2312, 400),
-        ("shelter_dypatil",  "DY Patil College",  16.7289, 74.2401, 350),
+        ("shelter_rajaram",  "Rajaram College",   16.7021, 74.2489, 35000),
+        ("shelter_stadium",  "Shahu Stadium",      16.6981, 74.2312, 30000),
+        ("shelter_dypatil",  "DY Patil College",  16.7289, 74.2401, 25000),
     ]
 
     road_nodes = [n for n in nodes if n.node_type == NodeType.LAND]
@@ -217,7 +218,7 @@ def get_flood_spread_ticks() -> int:
         return 3
 
 
-def generate_kolhapur_scenario(seed: int = 2019, max_requests: int = 25) -> dict:
+def generate_kolhapur_scenario(seed: int = 2019, max_requests: Optional[int] = None) -> dict:
     """
     Main entry point. Returns dict compatible with the simulation engine.
     Same interface as scenario.generate_scenario().
